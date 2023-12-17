@@ -1,19 +1,15 @@
-import React, { useState } from "react";
-import PrintTodo from "./components/PrintTodo";
-import { Todo } from "./types/Todo";
-import AddTodo from "./components/AddTodo";
+import { QueryClient, QueryClientProvider } from "react-query";
+import TodoList from "./components/TodoList";
+import GlobalStyles from "./styles/GlobalStyle";
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-
+  const queryClient = new QueryClient();
   return (
     <>
-      <h1>Todo</h1>
-      <AddTodo setTodos={setTodos} />
-      <ul>할 일 목록</ul>
-      <PrintTodo todos={todos} setTodos={setTodos} todoState={false} />
-      <ul>완료 목록</ul>
-      <PrintTodo todos={todos} setTodos={setTodos} todoState={true} />
+      <QueryClientProvider client={queryClient}>
+        <GlobalStyles />
+        <TodoList />
+      </QueryClientProvider>
     </>
   );
 }
