@@ -45,6 +45,12 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-`;
+//index.html에 있는 id이름가져옴
+#root{
+	width: 100vw;
+	height:100vh;
+	position:relative;
+}
+	`;
 
 export default GlobalStyles;

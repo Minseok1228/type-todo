@@ -2,10 +2,13 @@ import { Todo } from "../types/Todo";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteTodo, getTodos, switchTodo } from "../api/todosApi";
 import styled from "styled-components";
+import useCutomModal from "../hooks/UseCustomModal";
+import Btn from "./common/Btn";
 
 const PrintTodo = ({ todoState }: { todoState: boolean }) => {
   const { isLoading, isError, data } = useQuery("todos", getTodos);
   const qureyClient = useQueryClient();
+  const { handleOpenModal } = useCutomModal();
 
   const deleteMutation = useMutation(deleteTodo, {
     onSuccess: () => {
@@ -21,8 +24,12 @@ const PrintTodo = ({ todoState }: { todoState: boolean }) => {
   const onHandleIsDone = (todo: Todo) => {
     switchMutation.mutate(todo);
   };
-  const onHandleDeleteTodo = (id: string) => {
-    deleteMutation.mutate(id);
+  const onHandleDeleteTodo = async (id: string) => {
+    if (await handleOpenModal("정말 삭제하시겠습니까?", "confirm")) {
+      deleteMutation.mutate(id);
+      return;
+    }
+    return;
   };
   if (isLoading) {
     return <p>로딩중....</p>;
@@ -41,10 +48,12 @@ const PrintTodo = ({ todoState }: { todoState: boolean }) => {
             <StTitle>{todo.title}</StTitle>
             <StText>{todo.text}</StText>
             <StBtnBox>
-              <StBtn onClick={() => onHandleIsDone(todo)}>
+              <Btn onClick={() => onHandleIsDone(todo)} type={"list"}>
                 {todo.isDone ? "취소" : "완료"}
-              </StBtn>
-              <StBtn onClick={() => onHandleDeleteTodo(todo.id)}>삭제</StBtn>
+              </Btn>
+              <Btn onClick={() => onHandleDeleteTodo(todo.id)} type={"list"}>
+                삭제
+              </Btn>
             </StBtnBox>
           </StTodoCard>
         );
@@ -82,15 +91,4 @@ const StText = styled.p`
   padding: 10px;
   font-size: 15px;
   font-weight: 600;
-`;
-const StBtn = styled.button`
-  border-radius: 10px;
-  border: none;
-  color: white;
-  background-color: #dadada;
-  user-select: none;
-  cursor: pointer;
-  &:hover {
-    background-color: #b1b1b1;
-  }
 `;

@@ -45,7 +45,7 @@ const AddTodo = () => {
         maxLength={60}
         onChange={(e) => setText(e.target.value)}
       />
-      <StSubmitBtn>등록하기</StSubmitBtn>
+      <StSubmitBtn onClick={onHandleSubmit}>등록하기</StSubmitBtn>
     </StAddForm>
   );
 };
@@ -71,6 +71,5 @@ const StSubmitBtn = styled.button`
   cursor: pointer;
   &:hover {
     background-color: #b1b1b1;
-    color: white;
   }
 `;
